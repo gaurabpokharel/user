@@ -8,6 +8,8 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,7 +28,6 @@ public class UserController {
     })
     private User saveUser(@RequestBody User user) throws Exception {
         log.info("Inside the saveUser of User Controller");
-
         return userService.saveUser(user);
     }
 
@@ -36,7 +37,7 @@ public class UserController {
             @ApiResponse(code = 200, message = "Successfully search the user"),
             @ApiResponse(code = 500, message = "Unable to search the user")
     })
-    private User findUserById(@PathVariable("id") long userId)
+    private User findUserById(@PathVariable("id") long userId) throws Exception
     {
         log.info("Inside findUserById of user Controller");
         return  userService.findUserById(userId);
@@ -48,7 +49,7 @@ public class UserController {
             @ApiResponse(code = 200, message = "Successfully search the user with blog content"),
             @ApiResponse(code = 500, message = "Unable to search the user")
     })
-    public ResponseTemplateVO getUserWithBlog(@PathVariable("id") Long userId)
+    public ResponseTemplateVO getUserWithBlog(@PathVariable("id") Long userId) throws Exception
     {
         log.info("Inside getUserWithBlog of user Controller");
         return userService.getUserWithBlog(userId);

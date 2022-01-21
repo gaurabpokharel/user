@@ -15,11 +15,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
-import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -50,7 +48,7 @@ public class LoginController {
 		try {
 			boolean authenticated = authenticate(jwtRequest.getUsername(), jwtRequest.getPassword());
 			if (authenticated) {
-				UserDetails user = (UserDetails) userDetailService.loadUserByUsername(jwtRequest.getUsername());
+				UserDetails user = userDetailService.loadUserByUsername(jwtRequest.getUsername());
 				if (user.isEnabled()) {
 					System.out.println(user.isEnabled());
 					String token = jwtUtils.generateToken(user);
@@ -69,10 +67,10 @@ public class LoginController {
 	}
 
 	private boolean authenticate(String username, String password) {
-
 		boolean authenticated = false;
 		try {
-			authenticated = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password)).isAuthenticated();
+			authenticated = authenticationManager
+					.authenticate(new UsernamePasswordAuthenticationToken(username, password)).isAuthenticated();
 		} catch (DisabledException e) {
 			throw new BadCredentialException1("Disabled Account ");
 		} catch (BadCredentialsException e) {
